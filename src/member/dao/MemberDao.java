@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.servlet.jsp.jstl.sql.SQLExecutionTag;
+
 import jdbc.JdbcUtil;
 import member.model.Member;
 
@@ -56,6 +58,16 @@ public class MemberDao {
 			pstmt.setTimestamp(4, new Timestamp(mem.getRegDate().getTime()));
 			pstmt.executeUpdate();
 			
+		}
+		public void update(Connection conn, Member member)throws SQLException{
+			try (PreparedStatement pstmt = conn.prepareStatement(
+					"update member set name = ?, password = ? where memberid =?")){
+				pstmt.setString(1, member.getName());
+				pstmt.setString(2, member.getPassword());
+				pstmt.setString(3, member.getId());
+				pstmt.executeUpdate();
+
+			}
 		}
 	}
 }
