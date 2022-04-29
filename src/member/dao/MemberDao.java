@@ -57,7 +57,7 @@ public class MemberDao {
 			pstmt.setString(3, mem.getPassword());
 			pstmt.setTimestamp(4, new Timestamp(mem.getRegDate().getTime()));
 			pstmt.executeUpdate();
-			
+		}
 		}
 		public void update(Connection conn, Member member)throws SQLException{
 			try (PreparedStatement pstmt = conn.prepareStatement(
@@ -68,6 +68,6 @@ public class MemberDao {
 				pstmt.executeUpdate();
 
 			}
-		}
+		
 	}
 }

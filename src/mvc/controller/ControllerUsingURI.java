@@ -2,7 +2,7 @@ package mvc.controller;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -38,7 +38,8 @@ public class ControllerUsingURI extends HttpServlet {
 				CommandHandler handlerInstance = 
 						(CommandHandler)handlerClass.newInstance();
 				commandHandlerMap.put(command, handlerInstance);
-				
+			
+
 			}catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 				throw new ServletException(e);
 			}
@@ -62,6 +63,8 @@ public class ControllerUsingURI extends HttpServlet {
 		String command = req.getRequestURI();
 		if(command.indexOf(req.getContextPath())==0) {
 			command = command.substring(req.getContextPath().length());
+
+
 		}
 		
 		CommandHandler handler = commandHandlerMap.get(command);
@@ -80,9 +83,10 @@ public class ControllerUsingURI extends HttpServlet {
 		if(viewPage != null) {
 			RequestDispatcher dispatcher = req.getRequestDispatcher(viewPage);
 			dispatcher.forward(req, resp);
+		
+
 		}
 	}
-	
-	
-	
 }
+	
+	
