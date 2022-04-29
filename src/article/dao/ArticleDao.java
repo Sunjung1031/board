@@ -145,6 +145,13 @@ public class ArticleDao {
 			return pstmt.executeUpdate();
 		}
 	}
+	public int delete(Connection conn, int no, String title)throws SQLException{
+		try(PreparedStatement pstmt = conn.prepareStatement("delete from article title= ? "+
+				" where article_no= ?")){
+			pstmt.setString(1, title);
+			pstmt.setInt(2, no);
+			return pstmt.executeUpdate();
+		}
 	}
-	
+}
 
