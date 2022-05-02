@@ -10,44 +10,37 @@ import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
 
 public class DeleteArticleService {
-
 	private ArticleDao articleDao = new ArticleDao();
 	private ArticleContentDao contentDao = new ArticleContentDao();
-	
-	public void delete(DeleteRequest delReq) {
-		
+
+	public void deletion(DeleteRequest delReq) {
 		Connection conn = null;
-		
 		try {
 			conn = ConnectionProvider.getConnection();
 			conn.setAutoCommit(false);
-			
-			Article article = articleDao.selectById(conn,delReq.getArticleNumber());
-				
-				if(article == null) {
-					throw new ArticleNotFoundException();
-				}
-				if(!canDelete(delReq.getUserId(),article)) {
-					throw new PermissionDeniedException();
-				}
-				articleDao.delete(conn, delReq.getArticleNumber(), delReq.getTitle());
-				
-				contentDao.delete(conn, delReq.getArticleNumber(), delReq.getContent());
-				conn.commit();
-		}catch(SQLException e) {
+
+			Article article = articleDao.selectById(conn, delReq.getArticleNumber());
+			if (article == null) {
+				throw new ArticleNotFoundException();
+			}
+			if (!canDelete(delReq.getUserId(), article)) {
+				throw new PermissionDeniedException();
+			}
+			articleDao.delete(conn, delReq.getArticleNumber());
+			contentDao.delete(conn, delReq.getArticleNumber());
+			conn.commit();
+		} catch (SQLException e) {
 			JdbcUtil.rollback(conn);
 			throw new RuntimeException(e);
-		}catch(PermissionDeniedException e) {
+		} catch (PermissionDeniedException e) {
 			JdbcUtil.rollback(conn);
 			throw e;
-		}finally {
+		} finally {
 			JdbcUtil.close(conn);
-			
 		}
 	}
-	
-	private boolean canDelete(String deleteUserId, Article article) {
-		return article.getWriter().getId().equals(deleteUserId);
+
+	private boolean canDelete(String DeletionUserId, Article article) {
+		return article.getWriter().getId().equals(DeletionUserId);
 	}
-	
 }

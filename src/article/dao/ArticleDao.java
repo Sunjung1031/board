@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import article.model.Article;
+import article.model.ArticleContent;
 import article.model.Writer;
 import jdbc.JdbcUtil;
 
@@ -145,12 +146,16 @@ public class ArticleDao {
 			return pstmt.executeUpdate();
 		}
 	}
-	public int delete(Connection conn, int no, String title)throws SQLException{
-		try(PreparedStatement pstmt = conn.prepareStatement("delete from article title= ? "+
-				" where article_no= ?")){
-			pstmt.setString(1, title);
-			pstmt.setInt(2, no);
-			return pstmt.executeUpdate();
+	public ArticleContent delete(Connection conn, int no) throws SQLException {
+		PreparedStatement pstmt = null;
+				try {
+			pstmt = conn.prepareStatement("delete from article where article_no=?");
+			pstmt.setInt(1,no);
+			pstmt.executeUpdate();
+			ArticleContent content =null;
+			return content;
+		} finally {
+			JdbcUtil.close(pstmt);
 		}
 	}
 }
